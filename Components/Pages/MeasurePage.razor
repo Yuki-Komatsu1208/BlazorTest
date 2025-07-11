@@ -1,0 +1,45 @@
+﻿@* @page "/measure" *@
+@page "/measure/{MeasureArea?}"
+@page "/measure/{MeasureValue:float?}/{MeasureArea?}"
+@page "/measure/{MeasureValue:float?}/{MeasureDate:datetime?}/{MeasureArea?}"
+
+
+@using BlazorApp1.Objects
+@rendermode InteractiveServer
+
+<PageTitle>計測</PageTitle>
+<h3>MeasurePage</h3>
+
+
+<p>計測値の表示</p>
+<p>計測値：@MeasureValue</p>
+<p>計測日時：@MeasureDate</p>
+<p>計測場所：@MeasureArea</p>
+
+<button class="btn btn-primary" @onclick="Measure">計測</button>
+
+
+@code {
+    private string _measureValue = "--";
+    private string _measureDate = "--";
+    private string _measureArea = "札幌";
+
+    //パラメータ属性の付与
+    [Parameter]
+    public string MeasureArea { get; set; } = "--";
+
+    [Parameter]
+    public float MeasureValue { get; set; } = 0f;
+
+    [Parameter]
+    public DateTime MeasureDate { get; set; } = DateTime.MinValue;
+
+    private void Measure()
+    {
+        var measureResult = MeasureService.Measure();
+        _measureValue = Math.Round(measureResult.MeasureValue, 2) + " m/s";
+        _measureDate = measureResult.MeasureDate.ToString();
+
+
+    }
+}
